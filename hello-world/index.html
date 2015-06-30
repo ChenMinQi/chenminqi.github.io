@@ -2,6 +2,13 @@
  <!DOCTYPE HTML>
 <html lang="zh-CN">
 <head>
+
+  
+
+  <link href="/highlight/prettify-mma.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="/highlight/prettify.js"></script>
+  <script type="text/javascript" src="/highlight/lang-mma.js"></script>
+
   <meta charset="UTF-8">
   
     <title>博客开通鸟！ | Apple&#39;s Home</title>
@@ -25,6 +32,8 @@
     
     <link rel="stylesheet" href="/css/style.css" type="text/css">
 </head>
+
+<body onload="prettyPrint()">...</body>
 
   <body>
     <header>
@@ -77,7 +86,7 @@
     </p>
   <p class="article-time">
     <time datetime="2015-06-24T16:00:00.000Z" itemprop="datePublished">2015-06-25</time>
-    更新日期:<time datetime="2015-06-27T03:37:25.354Z" itemprop="dateModified">2015-06-27</time>
+    更新日期:<time datetime="2015-06-30T03:37:00.821Z" itemprop="dateModified">2015-06-30</time>
     
   </p>
 </header>
@@ -97,10 +106,17 @@
 <p>我的QQ名来源~~~</p>
 <embed src="http://music.163.com/style/swf/widget.swf?sid=32451394&type=2&auto=1&width=320&height=66" width="340" height="86" allownetworking="all">
 
-<h1 id="Code_Test">Code Test</h1><pre><code><span class="setting">a = <span class="value"><span class="number">1</span>;</span></span>
-<span class="setting">b = <span class="value"><span class="number">2</span>;</span></span>
-<span class="setting">c = <span class="value">a +b</span></span>
-</code></pre><hr>
+
+<h1 id="Code_Test">Code Test</h1><pre class="prettyprint  lang-mma">
+Clear["Global`*"]
+p = Import["C:\\Users\\chen\\Desktop\\win7\\some\\p\\4-4.png"];
+{m, n} = ImageDimensions@p;;
+rescale[x_, y_] := {Rescale[x, {1, m}, xRange], Rescale[y, {1, n}, yRange]}
+data = (rescale @@@ Sort[PixelValuePositions[p, #, 0.4]]) & /@ {Yellow, Red, Blue};
+{f1, f2, f3} = Interpolation /@ data;
+</pre>
+
+<hr>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -291,9 +307,9 @@ $(document).ready(function(){
   if(ai.length>0){
     ai.wrap('<div class="video-container" />');
   };
-  if(ae.length>0){
-   ae.wrap('<div class="video-container" />');
-  };
+
+  
+
   if(ah.length==0){
     t.css('display','none');
   }else{
