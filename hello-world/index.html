@@ -16,9 +16,7 @@
     
     <meta name="author" content="Apple">
     
-    <meta name="description" content="欢迎来到我的博客！
-由于莫名的原因，我一直觉得GitHub是个高大上的东西，所以我决定一定要排除千幸万苦努力把博客扎根在这里！
-更加欢迎大家收藏！">
+    <meta name="description" content="欢迎来到我的博客！由于莫名的原因，我一直觉得GitHub是个高大上的东西，所以我决定一定要排除千幸万苦努力把博客扎根在这里！更加欢迎大家收藏！">
     
     
     
@@ -63,7 +61,7 @@
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
 						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
-						<input type="hidden" name="q" value="site:chenminqi.github.io/about/resume.html">
+						<input type="hidden" name="q" value="site:chenminqi.github.io">
 					</form>
 					
 					</li>
@@ -82,11 +80,11 @@
   </h1>
   <p class="article-author">By
     
-      <a href="http://chenminqi.github.io/about/resume.html" title="Apple">Apple</a>
+      <a href="http://chenminqi.github.io" title="Apple">Apple</a>
     </p>
   <p class="article-time">
     <time datetime="2015-06-24T16:00:00.000Z" itemprop="datePublished">2015-06-25</time>
-    更新日期:<time datetime="2015-06-30T03:37:00.821Z" itemprop="dateModified">2015-06-30</time>
+    更新日期:<time datetime="2015-07-02T15:26:56.084Z" itemprop="dateModified">2015-07-02</time>
     
   </p>
 </header>
@@ -95,19 +93,14 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Code_Test"><span class="toc-number">1.</span> <span class="toc-text">Code Test</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Code_Test"><span class="toc-number">1.</span> <span class="toc-text">Code Test</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#更新"><span class="toc-number">2.</span> <span class="toc-text">更新</span></a></li></ol>
 		</div>
 		
-		<pre><code>欢迎来到我的博客！
-由于莫名的原因，我一直觉得GitHub是个高大上的东西，所以我决定一定要排除千幸万苦努力把博客扎根在这里！
-更加欢迎大家收藏！
-</code></pre><a id="more"></a>
+		<p>欢迎来到我的博客！<br>由于莫名的原因，我一直觉得GitHub是个高大上的东西，所以我决定一定要排除千幸万苦努力把博客扎根在这里！<br>更加欢迎大家收藏！</p>
+<a id="more"></a>
 <hr>
-<p>我的QQ名来源~~~</p>
-<embed src="http://music.163.com/style/swf/widget.swf?sid=32451394&type=2&auto=1&width=320&height=66" width="340" height="86" allownetworking="all">
-
-
-<h1 id="Code_Test">Code Test</h1><pre class="prettyprint  lang-mma">
+<h1 id="Code_Test">Code Test</h1><p>这里是一些正文，下面是一些代码，但是代码还有一些问题有待处理，记住菜鱼说的escape。</p>
+<pre class="prettyprint  lang-mma">
 Clear["Global`*"]
 p = Import["C:\\Users\\chen\\Desktop\\win7\\some\\p\\4-4.png"];
 {m, n} = ImageDimensions@p;;
@@ -116,6 +109,12 @@ data = (rescale @@@ Sort[PixelValuePositions[p, #, 0.4]]) & /@ {Yellow, Red, Blu
 {f1, f2, f3} = Interpolation /@ data;
 </pre>
 
+<p>这里是一些文字<code>some code</code>内嵌了一些代码</p>
+<h1 id="更新">更新</h1><ul>
+<li>2015.06.30 代码高亮使用SE</li>
+<li>2015.07.01 修改内嵌<code>code</code>样式</li>
+<li>2015.07.02 修改about内容</li>
+</ul>
 <hr>
   
 	</div>
@@ -136,7 +135,7 @@ data = (rescale @@@ Sort[PixelValuePositions[p, #, 0.4]]) & /@ {Yellow, Red, Blu
 
 <div class="article-share" id="share">
 
-  <div data-url="http://chenminqi.github.io/about/resume.html/hello-world/" data-title="博客开通鸟！ | Apple&#39;s Home" data-tsina="null" class="share clearfix">
+  <div data-url="http://chenminqi.github.io/hello-world/" data-title="博客开通鸟！ | Apple&#39;s Home" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -153,7 +152,7 @@ data = (rescale @@@ Sort[PixelValuePositions[p, #, 0.4]]) & /@ {Yellow, Red, Blu
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Code_Test"><span class="toc-number">1.</span> <span class="toc-text">Code Test</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Code_Test"><span class="toc-number">1.</span> <span class="toc-text">Code Test</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#更新"><span class="toc-number">2.</span> <span class="toc-text">更新</span></a></li></ol>
   </div>
 
 <div id="asidepart">
@@ -164,11 +163,12 @@ data = (rescale @@@ Sort[PixelValuePositions[p, #, 0.4]]) & /@ {Yellow, Red, Blu
   <p class="asidetitle">友情链接</p>
     <ul>
       <li><a href="http://v.qq.com/vplus/4bc1736725fc7c3567d5bd9617482a49/videos" target="_blank" title="MMA教学视频">我的腾讯视频</a></li>
-      <li><a href="http://yun.baidu.com/share/home?uk=2621619847&view=album" target="_blank">我的百度网盘</a></li>
+      <li><a href="http://yun.baidu.com/share/home?uk=2621619847&view=album" target="_blank" title="我的百度网盘">我的百度网盘</a></li>
       <li><a href="http://www.newsciencecore.com/newscience/index.html" target="_blank" title="是时候进行改变了~">新科学网</a></li>
       <li><a href="http://mathematica.stackexchange.com/" target="_blank" title="牛人出没之地~">Stack Exchange</a></li>
-      <li><a href="http://www.kylen314.com/" target="_blank">比特之理</a></li>
-      <li><a href="http://www.xianyungu.com/" target="_blank">闲云谷</a></li>
+      <li><a href="http://www.kylen314.com/" target="_blank" title="比特之理">比特之理</a></li>
+      <li><a href="http://www.xianyungu.com/" target="_blank" title="闲云谷">闲云谷</a></li>
+      <li><a href="http://hypergroups.cn/" target="_blank" title="HyperGroups">HyperGroups</a></li>
     </ul>
 </div>
 
@@ -241,7 +241,7 @@ data = (rescale @@@ Sort[PixelValuePositions[p, #, 0.4]]) & /@ {Yellow, Red, Blu
 	</div>
 		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
 		
-		<a href="http://chenminqi.github.io/about/resume.html" target="_blank" title="Apple">Apple</a>
+		<a href="http://chenminqi.github.io" target="_blank" title="Apple">Apple</a>
 		
 		</p>
 </div>
