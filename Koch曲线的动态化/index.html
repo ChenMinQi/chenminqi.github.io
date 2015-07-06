@@ -11,12 +11,12 @@
 
   <meta charset="UTF-8">
   
-    <title>博客开通鸟！ | Apple&#39;s Home</title>
+    <title>Koch曲线的动态化 | Apple&#39;s Home</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="Apple">
     
-    <meta name="description" content="欢迎来到我的博客！由于莫名的原因，我一直觉得GitHub是个高大上的东西，所以我决定一定要排除千幸万苦努力把博客扎根在这里！更加欢迎大家收藏！">
+    <meta name="description" content="上周在Matrix67的博客里看到了一个有点意思的博文，《7 个分形图形的动画演示》，而Matrix67并没有给出他的源代码，外加我曾经写过Koch曲线的代码，只差一个动态化的过程，所以就决定补一个代码。">
     
     
     
@@ -76,15 +76,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/Hello-World/" title="博客开通鸟！" itemprop="url">博客开通鸟！</a>
+      <a href="/Koch曲线的动态化/" title="Koch曲线的动态化" itemprop="url">Koch曲线的动态化</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://chenminqi.github.io" title="Apple">Apple</a>
     </p>
   <p class="article-time">
-    <time datetime="2015-06-24T16:00:00.000Z" itemprop="datePublished">2015-06-25</time>
-    更新日期:<time datetime="2015-07-06T08:49:30.441Z" itemprop="dateModified">2015-07-06</time>
+    <time datetime="2015-07-05T16:00:00.000Z" itemprop="datePublished">2015-07-06</time>
+    更新日期:<time datetime="2015-07-06T08:43:31.352Z" itemprop="dateModified">2015-07-06</time>
     
   </p>
 </header>
@@ -93,37 +93,39 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Code_Test"><span class="toc-number">1.</span> <span class="toc-text">Code Test</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CDF_Test"><span class="toc-number">2.</span> <span class="toc-text">CDF Test</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#更新"><span class="toc-number">3.</span> <span class="toc-text">更新</span></a></li></ol>
+		
 		</div>
 		
-		<p>欢迎来到我的博客！由于莫名的原因，我一直觉得GitHub是个高大上的东西，所以我决定一定要排除千幸万苦努力把博客扎根在这里！更加欢迎大家收藏！</p>
+		<p>上周在<a href="http://www.matrix67.com/blog/" target="_blank" rel="external">Matrix67的博客</a>里看到了一个有点意思的博文，<a href="http://www.matrix67.com/blog/archives/6231" target="_blank" rel="external">《7 个分形图形的动画演示》</a>，而Matrix67并没有给出他的源代码，外加我曾经写过Koch曲线的代码，只差一个动态化的过程，所以就决定补一个代码。</p>
+<p><img src="http://7xk6ow.com1.z0.glb.clouddn.com/Koch.gif" alt=""></p>
 <a id="more"></a>
-<hr>
-<h1 id="Code_Test">Code Test</h1><p>这里是一些正文，下面是一些代码，但是代码还有一些问题有待处理，记住菜鱼说的escape。</p>
+<p>初稿，无说明，只有源码</p>
 <pre class="prettyprint  lang-mma">
 Clear["Global`*"]
-p = Import["C:\\Users\\chen\\Desktop\\win7\\some\\p\\4-4.png"];
-{m, n} = ImageDimensions@p;;
-rescale[x_, y_] := {Rescale[x, {1, m}, xRange], Rescale[y, {1, n}, yRange]}
-data = (rescale @@@ Sort[PixelValuePositions[p, #, 0.4]]) & /@ {Yellow, Red, Blue};
-{f1, f2, f3} = Interpolation /@ data;
+rotate[{x1_, y1_}, {x2_, y2_}] := Evaluate[Simplify@RotationTransform[1. Pi/3, {x2, y2}][{x1, y1}]];
+generate[{p1_, p5_}] := Module[{p2, p3, p4},
+    p2 = (p5 - p1)/3 + p1;
+    p4 = 2 (p5 - p1)/3 + p1;
+    p3 = rotate[p4, p2];
+    {p1, p2, p3, p4}]
+data[0] = N@{ {0, 0}, {1, 0} };
+data[n_] := data[n] = Flatten[{generate /@ Partition[data[n - 1], 2, 1], { { {1, 0} } }}, 2];
+get[{p1_, p2_, p3_, p4_, p5_}, t_] := { {p1, p2, (1 - t) p4 + t p3}, {(1 - t) p2 + t p3, p4, p5}}
+getGIF[data_, t_] := get[#, t] & /@ Partition[data, 5, 4];
+newdata[t_] := Flatten[getGIF[data[Quotient[t + 1, 1]], Mod[t, 1]], 1];
+
+Manipulate[ListLinePlot[newdata[t], PlotRange -> { {0, 1}, {-0.02, 0.3}}, 
+  AspectRatio -> 0.32, Axes -> False, PlotStyle -> RGBColor[0.353, 0.741, 0.913], 
+  ImageSize -> {500, 200}], {t, 0, 4, 0.03}, SaveDefinitions -> True, 
+ AutorunSequencing -> All]
+
+alldata = Table[newdata[t], {t, 0, 4, 0.02}];
+pic = ListLinePlot[#, PlotRange -> { {0, 1}, {-0.02, 0.3}}, AspectRatio -> 0.32, Axes -> False, 
+     PlotStyle -> RGBColor[0.353, 0.741, 0.913], ImageSize -> {500, 200}] & /@ alldata;
+Export[NotebookDirectory[] <> "Koch.gif", pic, "DisplayDurations" -> 1/60]
+
 </pre>
 
-<p>这里是一些文字<code>some code</code>内嵌了一些代码</p>
-<h1 id="CDF_Test">CDF Test</h1><script type="text/javascript" src="http://www.wolfram.com/cdf-player/plugin/v2.1/cdfplugin.js"></script>
-<script type="text/javascript">
-var cdf = new cdfplugin();
-cdf.setDefaultContent('<a href="http://www.wolfram.com/cdf-player/"><img  src="/cdf/cdf1.png"></a>');
-cdf.embed('/cdf/cdf1.cdf', 588, 400);
-</script>
-
-<h1 id="更新">更新</h1><ul>
-<li>2015.06.30 代码高亮使用SE</li>
-<li>2015.07.01 修改内嵌<code>code</code>样式</li>
-<li>2015.07.02 修改about内容</li>
-<li>2015.07.05 CDF添加成功</li>
-<li>2015.07.06 添加邮件订阅，Koch曲线的动态化初稿</li>
-</ul>
 <hr>
   
 	</div>
@@ -131,20 +133,20 @@ cdf.embed('/cdf/cdf1.cdf', 588, 400);
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Hello-World/">Hello World</a>
+  <span></span> <a href="/tags/Koch/">Koch</a><a href="/tags/Mathematica/">Mathematica</a><a href="/tags/动态/">动态</a>
   </div>
 
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/没想好/">没想好</a>
+  <a class="article-category-link" href="/categories/Mathematica/">Mathematica</a>
 </div>
 
 
 
 <div class="article-share" id="share">
 
-  <div data-url="http://chenminqi.github.io/Hello-World/" data-title="博客开通鸟！ | Apple&#39;s Home" data-tsina="null" class="share clearfix">
+  <div data-url="http://chenminqi.github.io/Koch曲线的动态化/" data-title="Koch曲线的动态化 | Apple&#39;s Home" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -153,14 +155,14 @@ cdf.embed('/cdf/cdf1.cdf', 588, 400);
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/Koch曲线的动态化/" title="Koch曲线的动态化">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  Koch曲线的动态化</span>
+
+<div class="next">
+<a href="/Hello-World/"  title="博客开通鸟！">
+ <strong>NEXT:</strong><br/> 
+ <span>博客开通鸟！
+</span>
 </a>
 </div>
-
 
 </nav>
 
@@ -174,7 +176,7 @@ cdf.embed('/cdf/cdf1.cdf', 588, 400);
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Code_Test"><span class="toc-number">1.</span> <span class="toc-text">Code Test</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CDF_Test"><span class="toc-number">2.</span> <span class="toc-text">CDF Test</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#更新"><span class="toc-number">3.</span> <span class="toc-text">更新</span></a></li></ol>
+  
   </div>
 
 <div id="asidepart">

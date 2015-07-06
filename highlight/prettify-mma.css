@@ -13,8 +13,8 @@ width: auto;
 }
 
 code {
-background: none repeat scroll 0 0 #F3F3F3;
-color: #222222;
-font-family: 'Droid Sans Mono',Consolas,Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,serif;
-font-size: 12px;
+    background: none repeat scroll 0 0 #F3F3F3;
+    color: #222222;
+    font-family: 'Droid Sans Mono',Consolas,Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,serif;
+    font-size: 12px;
 }
