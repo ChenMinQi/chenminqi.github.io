@@ -11,12 +11,12 @@
 
   <meta charset="UTF-8">
   
-    <title>Koch曲线的动态化 | Apple&#39;s Home</title>
+    <title>黑白棋（未完成） | Apple&#39;s Home</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="Apple">
     
-    <meta name="description" content="上周在Matrix67的博客里看到了一个有点意思的博文，《7 个分形图形的动画演示》，而Matrix67并没有给出他的源代码，外加我曾经写过Koch曲线的代码，只差一个动态化的过程，所以就决定补一个代码。">
+    <meta name="description" content="无影冬瓜写了个黑白棋，所以我也写了个黑白棋有些代码照搬了冬瓜的代码。">
     
     
     
@@ -76,15 +76,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/Koch曲线的动态化/" title="Koch曲线的动态化" itemprop="url">Koch曲线的动态化</a>
+      <a href="/黑白棋/" title="黑白棋（未完成）" itemprop="url">黑白棋（未完成）</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://chenminqi.github.io" title="Apple">Apple</a>
     </p>
   <p class="article-time">
-    <time datetime="2015-07-05T16:00:00.000Z" itemprop="datePublished">2015-07-06</time>
-    更新日期:<time datetime="2015-07-06T08:43:31.352Z" itemprop="dateModified">2015-07-06</time>
+    <time datetime="2015-07-14T16:00:00.000Z" itemprop="datePublished">2015-07-15</time>
+    更新日期:<time datetime="2015-07-15T15:36:37.971Z" itemprop="dateModified">2015-07-15</time>
     
   </p>
 </header>
@@ -93,47 +93,27 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CDF"><span class="toc-number">1.</span> <span class="toc-text">CDF</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#代码"><span class="toc-number">2.</span> <span class="toc-text">代码</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#}]"><span class="toc-number">2.1.</span> <span class="toc-text">   }]</span></a></li></ol></li></ol>
 		</div>
 		
-		<p>上周在<a href="http://www.matrix67.com/blog/" target="_blank" rel="external">Matrix67的博客</a>里看到了一个有点意思的博文，<a href="http://www.matrix67.com/blog/archives/6231" target="_blank" rel="external">《7 个分形图形的动画演示》</a>，而Matrix67并没有给出他的源代码，外加我曾经写过Koch曲线的代码，只差一个动态化的过程，所以就决定补一个代码。</p>
-<p><img src="http://7xk6ow.com1.z0.glb.clouddn.com/Koch.gif" alt=""></p>
+		<p>无影冬瓜写了个黑白棋，所以我也写了个黑白棋<del>有些代码照搬了冬瓜的代码</del>。</p>
 <a id="more"></a>
-<p>初稿，无说明，只有源码</p>
-<pre class="prettyprint  lang-mma">
-Clear["Global`*"]
-rotate[{x1_, y1_}, {x2_, y2_}] := Evaluate[Simplify@RotationTransform[1. Pi/3, {x2, y2}][{x1, y1}]];
-generate[{p1_, p5_}] := Module[{p2, p3, p4},
-    p2 = (p5 - p1)/3 + p1;
-    p4 = 2 (p5 - p1)/3 + p1;
-    p3 = rotate[p4, p2];
-    {p1, p2, p3, p4}]
-data[0] = N@{ {0, 0}, {1, 0} };
-data[n_] := data[n] = Flatten[{generate /@ Partition[data[n - 1], 2, 1], { { {1, 0} } }}, 2];
-get[{p1_, p2_, p3_, p4_, p5_}, t_] := { {p1, p2, (1 - t) p4 + t p3}, {(1 - t) p2 + t p3, p4, p5}}
-getGIF[data_, t_] := get[#, t] & /@ Partition[data, 5, 4];
-newdata[t_] := Flatten[getGIF[data[Quotient[t + 1, 1]], Mod[t, 1]], 1];
+<p>初稿，无说明，只有源码。<br>冬瓜的代码链接<a href="http://www.newsciencecore.com/forum/forum.php?mod=viewthread&amp;tid=372" target="_blank" rel="external">!黑白棋</a>。</p>
+<h1 id="CDF">CDF</h1><script type="text/javascript" src="http://www.wolfram.com/cdf-player/plugin/v2.1/cdfplugin.js"></script>
+<script type="text/javascript">
+var cdf = new cdfplugin();
+cdf.setDefaultContent('<a href="http://www.wolfram.com/cdf-player/"><img  src="/cdf/cdf2.png"></a>');
+cdf.embed('/cdf/cdf2.cdf', 800, 600);
+</script>
 
-Manipulate[ListLinePlot[newdata[t], PlotRange -> { {0, 1}, {-0.02, 0.3}}, 
-  AspectRatio -> 0.32, Axes -> False, PlotStyle -> RGBColor[0.353, 0.741, 0.913], 
-  ImageSize -> {500, 200}], {t, 0, 4, 0.03}, SaveDefinitions -> True, 
- AutorunSequencing -> All]
-
-alldata = Table[newdata[t], {t, 0, 4, 0.02}];
-pic = ListLinePlot[#, PlotRange -> { {0, 1}, {-0.02, 0.3}}, AspectRatio -> 0.32, Axes -> False, 
-     PlotStyle -> RGBColor[0.353, 0.741, 0.913], ImageSize -> {500, 200}] & /@ alldata;
-Export[NotebookDirectory[] <> "Koch.gif", pic, "DisplayDurations" -> 1/60]
-
-</pre>
-
-<hr>
-  
+<h1 id="代码">代码</h1><p><pre class="prettyprint  lang-mma">Manipulate[Deploy@Row[{Graphics[{<br>      Table[With[{i = i, j = j}, Button[{Disk[{j, 9 - i} - 0.5, .4]}, set[i, j]]], {i, 8}, {j, 8}],<br>      {RGBColor[0, .5, 0], Rectangle[{0, 0}, {8, 8}]},<br>      {Thick, Line[Table[{ {i, 0}, {i, 8}}, {i, 0, 8}]]},<br>      {Thick, Line[Table[{ {0, i}, {8, i}}, {i, 0, 8}]]},<br>      drawchess[chess],<br>      {If[color == 1, Black, White], Orange, PointSize[0.03], Point[{&#35; 2, 9 - &#35; 1} - 0.5 &amp; @@@<br>             FindSetable[chessmat, color][[All, 2]]]},<br>      Dynamic@{If[color == 1, Black, White], Opacity[.5],<br>             Disk[MousePosition[{“Graphics”, Graphics}, {-2, -2}], .4]},<br>      }, ImageSize -&gt; 300, PlotRange -&gt; { {0, 8}, {0, 8}}],<br>     Column[{<br>      Column[{Graphics[{Black, AbsolutePointSize[18], Point[{0, 0}],<br>          Text[Dynamic@Style[Count[chess, 1, 2], 18, Bold], {4, 0}]}, ImageSize -&gt; {80, 20}],<br>        Graphics[{White, AbsolutePointSize[18], Point[{0, 0}],<br>          Text[Dynamic@Style[Count[chess, -1, 2], 18, Bold], {4, 0}]},ImageSize -&gt; {80, 20}]},<br>          Alignment -&gt; Left, ItemSize -&gt; {8, 2}],<br>      RadioButtonBar[Dynamic[type], &#35; 1 -&gt; Style[&#35; 2, 16, Bold] &amp; @@@ { {2,<br>          “双人对弈”}, {1, “人机对弈”}}, Appearance -&gt; “Vertical”],<br>      Button[Style[“重新开始”, 16, Bold], initialize[], ImageSize -&gt; Automatic]<br>      }, ItemSize -&gt; {8, 8}, Alignment -&gt; {Center, Center}]},<br>   Background -&gt; Brown, Alignment -&gt; {Center, Center},<br>   Frame -&gt; True], { {type, 2}, {}, ControlType -&gt; None},<br> Initialization :&gt; {<br>   initialize[] := {<br>     chessmat = Array[{&#35; 1, &#35; 2, 0} &amp;, {8, 8}];<br>     (chessmat[[&#35; 1, &#35; 2, 3]] = &#35; 3) &amp; @@@ { {4, 4, 1}, {4, 5, -1}, {5, 4, -1}, {5, 5, 1}};<br>     color = 1;<br>     };<br>   chess := chessmat[[All, All, 3]];<br>   initialize[];<br>   drawchess[mat<em>] :=<br>    Join[{Black, Disk[{&#35; 2, 9 - &#35; 1} - 0.5, .4]} &amp; @@@ Position[mat, 1],<br>      {White, Disk[{&#35; 2, 9 - &#35; 1} - 0.5, .4]} &amp; @@@ Position[mat, -1]];<br>   FindSetable[mat</em>, c<em>] :=<br>    SequenceCases[&#35; , { {i1</em>, j1<em>, c}, {</em>, <em>, -c} .., {i2</em>, j2<em>,<br>            0}} | { {i2</em>, j2<em>, 0}, {</em>, <em>, -c} .., {i1</em>, j1<em>,<br>            c}} :&gt; { {i1, j1}, {i2, j2}}] &amp; /@ (Join @@ {mat,<br>         Transpose@mat, Diagonal[mat, &#35; ] &amp; /@ Range[-5, 5],<br>         Diagonal[Reverse@mat, &#35; ] &amp; /@ Range[-5, 5]}) // Join @@ &#35;  &amp;;<br>   GetTurnPosition[{p1 : {i1</em>, j1<em>}, p2 : {i2</em>, j2<em>}}] :=<br>    NestList[&#35;  + Sign[p2 - p1] &amp;, p1, Max[Abs /@ {i2 - i1, j2 - j1}]];<br>   set[i</em>, j<em>] := Module[{pos},<br>     If[(pos = Cases[FindSetable[chessmat, color], { {</em>, <em>}, {i, j}}]) != {},<br>      (chessmat[[&#35; 1, &#35; 2, 3]] = color) &amp; @@@ (Join @@ GetTurnPosition /@ pos);<br>      color *= -1;<br>      ];<br>     WinQ[];<br>     If[type == 1 &amp;&amp; color == -1, AISet[]]<br>     ];<br>   WinQ[] := If[FindSetable[chessmat, color] == {} || FreeQ[chess, 0],<br>     CreateDialog[{Style[“游戏结束,” &lt;&gt; Switch[Total[chess, 2], </em>?(&#35;  &gt; 0 &amp;), “黑方胜”, <em>?(&#35;  &lt; 0 &amp;),<br>          “白方胜”, </em>, “平局”], 16, Bold],<br>       ChoiceButtons[{“再来一局”, “取消”}, {initialize[];<br>         DialogReturn[], DialogReturn[]}]}]<br>     ];<br>   AISet[] := set @@ Last@RandomChoice@FindSetable[chessmat, color];</pre></p>
+<h2 id="}]">   }]</h2>  
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Koch/">Koch</a><a href="/tags/Mathematica/">Mathematica</a><a href="/tags/动态/">动态</a>
+  <span></span> <a href="/tags/Mathematica/">Mathematica</a><a href="/tags/游戏/">游戏</a><a href="/tags/黑白棋/">黑白棋</a>
   </div>
 
 
@@ -146,7 +126,7 @@ Export[NotebookDirectory[] <> "Koch.gif", pic, "DisplayDurations" -> 1/60]
 
 <div class="article-share" id="share">
 
-  <div data-url="http://chenminqi.github.io/Koch曲线的动态化/" data-title="Koch曲线的动态化 | Apple&#39;s Home" data-tsina="null" class="share clearfix">
+  <div data-url="http://chenminqi.github.io/黑白棋/" data-title="黑白棋（未完成） | Apple&#39;s Home" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -155,19 +135,11 @@ Export[NotebookDirectory[] <> "Koch.gif", pic, "DisplayDurations" -> 1/60]
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/清除内存相关/" title="为什么Clear不掉已经不需要的内存？">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  为什么Clear不掉已经不需要的内存？</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/Hello-World/"  title="博客开通鸟！">
+<a href="/校园生活/"  title="毕业拍照留恋">
  <strong>NEXT:</strong><br/> 
- <span>博客开通鸟！
+ <span>毕业拍照留恋
 </span>
 </a>
 </div>
@@ -184,7 +156,7 @@ Export[NotebookDirectory[] <> "Koch.gif", pic, "DisplayDurations" -> 1/60]
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CDF"><span class="toc-number">1.</span> <span class="toc-text">CDF</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#代码"><span class="toc-number">2.</span> <span class="toc-text">代码</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#}]"><span class="toc-number">2.1.</span> <span class="toc-text">   }]</span></a></li></ol></li></ol>
   </div>
 
 <div id="asidepart">
