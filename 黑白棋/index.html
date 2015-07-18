@@ -84,7 +84,7 @@
     </p>
   <p class="article-time">
     <time datetime="2015-07-14T16:00:00.000Z" itemprop="datePublished">2015-07-15</time>
-    更新日期:<time datetime="2015-07-15T15:36:37.971Z" itemprop="dateModified">2015-07-15</time>
+    更新日期:<time datetime="2015-07-15T15:55:44.095Z" itemprop="dateModified">2015-07-15</time>
     
   </p>
 </header>
@@ -93,7 +93,7 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CDF"><span class="toc-number">1.</span> <span class="toc-text">CDF</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#代码"><span class="toc-number">2.</span> <span class="toc-text">代码</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#}]"><span class="toc-number">2.1.</span> <span class="toc-text">   }]</span></a></li></ol></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CDF"><span class="toc-number">1.</span> <span class="toc-text">CDF</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#代码"><span class="toc-number">2.</span> <span class="toc-text">代码</span></a></li></ol>
 		</div>
 		
 		<p>无影冬瓜写了个黑白棋，所以我也写了个黑白棋<del>有些代码照搬了冬瓜的代码</del>。</p>
@@ -106,8 +106,68 @@ cdf.setDefaultContent('<a href="http://www.wolfram.com/cdf-player/"><img  src="/
 cdf.embed('/cdf/cdf2.cdf', 800, 600);
 </script>
 
-<h1 id="代码">代码</h1><p><pre class="prettyprint  lang-mma">Manipulate[Deploy@Row[{Graphics[{<br>      Table[With[{i = i, j = j}, Button[{Disk[{j, 9 - i} - 0.5, .4]}, set[i, j]]], {i, 8}, {j, 8}],<br>      {RGBColor[0, .5, 0], Rectangle[{0, 0}, {8, 8}]},<br>      {Thick, Line[Table[{ {i, 0}, {i, 8}}, {i, 0, 8}]]},<br>      {Thick, Line[Table[{ {0, i}, {8, i}}, {i, 0, 8}]]},<br>      drawchess[chess],<br>      {If[color == 1, Black, White], Orange, PointSize[0.03], Point[{&#35; 2, 9 - &#35; 1} - 0.5 &amp; @@@<br>             FindSetable[chessmat, color][[All, 2]]]},<br>      Dynamic@{If[color == 1, Black, White], Opacity[.5],<br>             Disk[MousePosition[{“Graphics”, Graphics}, {-2, -2}], .4]},<br>      }, ImageSize -&gt; 300, PlotRange -&gt; { {0, 8}, {0, 8}}],<br>     Column[{<br>      Column[{Graphics[{Black, AbsolutePointSize[18], Point[{0, 0}],<br>          Text[Dynamic@Style[Count[chess, 1, 2], 18, Bold], {4, 0}]}, ImageSize -&gt; {80, 20}],<br>        Graphics[{White, AbsolutePointSize[18], Point[{0, 0}],<br>          Text[Dynamic@Style[Count[chess, -1, 2], 18, Bold], {4, 0}]},ImageSize -&gt; {80, 20}]},<br>          Alignment -&gt; Left, ItemSize -&gt; {8, 2}],<br>      RadioButtonBar[Dynamic[type], &#35; 1 -&gt; Style[&#35; 2, 16, Bold] &amp; @@@ { {2,<br>          “双人对弈”}, {1, “人机对弈”}}, Appearance -&gt; “Vertical”],<br>      Button[Style[“重新开始”, 16, Bold], initialize[], ImageSize -&gt; Automatic]<br>      }, ItemSize -&gt; {8, 8}, Alignment -&gt; {Center, Center}]},<br>   Background -&gt; Brown, Alignment -&gt; {Center, Center},<br>   Frame -&gt; True], { {type, 2}, {}, ControlType -&gt; None},<br> Initialization :&gt; {<br>   initialize[] := {<br>     chessmat = Array[{&#35; 1, &#35; 2, 0} &amp;, {8, 8}];<br>     (chessmat[[&#35; 1, &#35; 2, 3]] = &#35; 3) &amp; @@@ { {4, 4, 1}, {4, 5, -1}, {5, 4, -1}, {5, 5, 1}};<br>     color = 1;<br>     };<br>   chess := chessmat[[All, All, 3]];<br>   initialize[];<br>   drawchess[mat<em>] :=<br>    Join[{Black, Disk[{&#35; 2, 9 - &#35; 1} - 0.5, .4]} &amp; @@@ Position[mat, 1],<br>      {White, Disk[{&#35; 2, 9 - &#35; 1} - 0.5, .4]} &amp; @@@ Position[mat, -1]];<br>   FindSetable[mat</em>, c<em>] :=<br>    SequenceCases[&#35; , { {i1</em>, j1<em>, c}, {</em>, <em>, -c} .., {i2</em>, j2<em>,<br>            0}} | { {i2</em>, j2<em>, 0}, {</em>, <em>, -c} .., {i1</em>, j1<em>,<br>            c}} :&gt; { {i1, j1}, {i2, j2}}] &amp; /@ (Join @@ {mat,<br>         Transpose@mat, Diagonal[mat, &#35; ] &amp; /@ Range[-5, 5],<br>         Diagonal[Reverse@mat, &#35; ] &amp; /@ Range[-5, 5]}) // Join @@ &#35;  &amp;;<br>   GetTurnPosition[{p1 : {i1</em>, j1<em>}, p2 : {i2</em>, j2<em>}}] :=<br>    NestList[&#35;  + Sign[p2 - p1] &amp;, p1, Max[Abs /@ {i2 - i1, j2 - j1}]];<br>   set[i</em>, j<em>] := Module[{pos},<br>     If[(pos = Cases[FindSetable[chessmat, color], { {</em>, <em>}, {i, j}}]) != {},<br>      (chessmat[[&#35; 1, &#35; 2, 3]] = color) &amp; @@@ (Join @@ GetTurnPosition /@ pos);<br>      color *= -1;<br>      ];<br>     WinQ[];<br>     If[type == 1 &amp;&amp; color == -1, AISet[]]<br>     ];<br>   WinQ[] := If[FindSetable[chessmat, color] == {} || FreeQ[chess, 0],<br>     CreateDialog[{Style[“游戏结束,” &lt;&gt; Switch[Total[chess, 2], </em>?(&#35;  &gt; 0 &amp;), “黑方胜”, <em>?(&#35;  &lt; 0 &amp;),<br>          “白方胜”, </em>, “平局”], 16, Bold],<br>       ChoiceButtons[{“再来一局”, “取消”}, {initialize[];<br>         DialogReturn[], DialogReturn[]}]}]<br>     ];<br>   AISet[] := set @@ Last@RandomChoice@FindSetable[chessmat, color];</pre></p>
-<h2 id="}]">   }]</h2>  
+<h1 id="代码">代码</h1><pre class="prettyprint  lang-mma">Manipulate[Deploy@Row[{Graphics[{
+      Table[With[{i = i, j = j}, Button[{Disk[{j, 9 - i} - 0.5, .4]}, set[i, j]]], {i, 8}, {j, 8}],
+      {RGBColor[0, .5, 0], Rectangle[{0, 0}, {8, 8}]}, 
+      {Thick, Line[Table[{ {i, 0}, {i, 8}}, {i, 0, 8}]]}, 
+      {Thick, Line[Table[{ {0, i}, {8, i}}, {i, 0, 8}]]},
+      drawchess[chess],
+      {If[color == 1, Black, White], Orange, PointSize[0.03], Point[{&#35; 2, 9 - &#35; 1} - 0.5 & @@@      
+             FindSetable[chessmat, color][[All, 2]]]},
+      Dynamic@{If[color == 1, Black, White], Opacity[.5], 
+             Disk[MousePosition[{"Graphics", Graphics}, {-2, -2}], .4]},
+      }, ImageSize -> 300, PlotRange -> { {0, 8}, {0, 8}}], 
+     Column[{
+      Column[{Graphics[{Black, AbsolutePointSize[18], Point[{0, 0}], 
+          Text[Dynamic@Style[Count[chess, 1, 2], 18, Bold], {4, 0}]}, ImageSize -> {80, 20}], 
+        Graphics[{White, AbsolutePointSize[18], Point[{0, 0}], 
+          Text[Dynamic@Style[Count[chess, -1, 2], 18, Bold], {4, 0}]},ImageSize -> {80, 20}]}, 
+          Alignment -> Left, ItemSize -> {8, 2}],
+      RadioButtonBar[Dynamic[type], &#35; 1 -> Style[&#35; 2, 16, Bold] & @@@ { {2, 
+          "双人对弈"}, {1, "人机对弈"}}, Appearance -> "Vertical"],
+      Button[Style["重新开始", 16, Bold], initialize[], ImageSize -> Automatic]
+      }, ItemSize -> {8, 8}, Alignment -> {Center, Center}]}, 
+   Background -> Brown, Alignment -> {Center, Center}, 
+   Frame -> True], { {type, 2}, {}, ControlType -> None},
+ Initialization :> {
+   initialize[] := {
+     chessmat = Array[{&#35; 1, &#35; 2, 0} &, {8, 8}];
+     (chessmat[[&#35; 1, &#35; 2, 3]] = &#35; 3) & @@@ { {4, 4, 1}, {4, 5, -1}, {5, 4, -1}, {5, 5, 1}};
+     color = 1;
+     };
+   chess := chessmat[[All, All, 3]];
+   initialize[];
+   drawchess[mat_] := 
+    Join[{Black, Disk[{&#35; 2, 9 - &#35; 1} - 0.5, .4]} & @@@ Position[mat, 1], 
+      {White, Disk[{&#35; 2, 9 - &#35; 1} - 0.5, .4]} & @@@ Position[mat, -1]];
+   FindSetable[mat_, c_] := 
+    SequenceCases[&#35; , { {i1_, j1_, c}, {_, _, -c} .., {i2_, j2_, 
+            0}} | { {i2_, j2_, 0}, {_, _, -c} .., {i1_, j1_, 
+            c}} :> { {i1, j1}, {i2, j2}}] & /@ (Join @@ {mat, 
+         Transpose@mat, Diagonal[mat, &#35; ] & /@ Range[-5, 5], 
+         Diagonal[Reverse@mat, &#35; ] & /@ Range[-5, 5]}) // Join @@ &#35;  &;
+   GetTurnPosition[{p1 : {i1_, j1_}, p2 : {i2_, j2_}}] := 
+    NestList[&#35;  + Sign[p2 - p1] &, p1, Max[Abs /@ {i2 - i1, j2 - j1}]];
+   set[i_, j_] := Module[{pos},
+     If[(pos = Cases[FindSetable[chessmat, color], { {_, _}, {i, j}}]) != {},
+      (chessmat[[&#35; 1, &#35; 2, 3]] = color) & @@@ (Join @@ GetTurnPosition /@ pos);
+      color *= -1;
+      ];
+     WinQ[];
+     If[type == 1 && color == -1, AISet[]]
+     ];
+   WinQ[] := If[FindSetable[chessmat, color] == {} || FreeQ[chess, 0],
+     CreateDialog[{Style["游戏结束," <> Switch[Total[chess, 2], _?(&#35;  > 0 &), "黑方胜", _?(&#35;  < 0 &), 
+          "白方胜", _, "平局"], 16, Bold], 
+       ChoiceButtons[{"再来一局", "取消"}, {initialize[];
+         DialogReturn[], DialogReturn[]}]}]
+     ];
+   AISet[] := set @@ Last@RandomChoice@FindSetable[chessmat, color];
+   }]
+</pre>
+
+<hr>
+  
 	</div>
 		<footer class="article-footer clearfix">
 
@@ -156,7 +216,7 @@ cdf.embed('/cdf/cdf2.cdf', 800, 600);
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CDF"><span class="toc-number">1.</span> <span class="toc-text">CDF</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#代码"><span class="toc-number">2.</span> <span class="toc-text">代码</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#}]"><span class="toc-number">2.1.</span> <span class="toc-text">   }]</span></a></li></ol></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CDF"><span class="toc-number">1.</span> <span class="toc-text">CDF</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#代码"><span class="toc-number">2.</span> <span class="toc-text">代码</span></a></li></ol>
   </div>
 
 <div id="asidepart">

@@ -16,7 +16,7 @@
     
     <meta name="author" content="Apple">
     
-    <meta name="description" content="上周在Matrix67的博客里看到了一个有点意思的博文，《7 个分形图形的动画演示》，而Matrix67并没有给出他的源代码，外加我曾经写过Koch曲线的代码，只差一个动态化的过程，所以就决定补一个代码。">
+    <meta name="description" content="上周在Matrix67的博客里看到了一个有点意思的博文《7 个分形图形的动画演示》，而Matrix67并没有给出他的源代码，外加我曾经写过Koch曲线的代码，只差一个动态化的过程，所以就决定补一个代码。">
     
     
     
@@ -84,7 +84,7 @@
     </p>
   <p class="article-time">
     <time datetime="2015-07-05T16:00:00.000Z" itemprop="datePublished">2015-07-06</time>
-    更新日期:<time datetime="2015-07-06T08:43:31.352Z" itemprop="dateModified">2015-07-06</time>
+    更新日期:<time datetime="2015-07-18T15:58:43.933Z" itemprop="dateModified">2015-07-18</time>
     
   </p>
 </header>
@@ -96,34 +96,107 @@
 		
 		</div>
 		
-		<p>上周在<a href="http://www.matrix67.com/blog/" target="_blank" rel="external">Matrix67的博客</a>里看到了一个有点意思的博文，<a href="http://www.matrix67.com/blog/archives/6231" target="_blank" rel="external">《7 个分形图形的动画演示》</a>，而Matrix67并没有给出他的源代码，外加我曾经写过Koch曲线的代码，只差一个动态化的过程，所以就决定补一个代码。</p>
+		<p>上周在<a href="http://www.matrix67.com/blog/" target="_blank" rel="external">Matrix67的博客</a>里看到了一个有点意思的博文<a href="http://www.matrix67.com/blog/archives/6231" target="_blank" rel="external">《7 个分形图形的动画演示》</a>，而Matrix67并没有给出他的源代码，外加我曾经写过Koch曲线的代码，只差一个动态化的过程，所以就决定补一个代码。</p>
 <p><img src="http://7xk6ow.com1.z0.glb.clouddn.com/Koch.gif" alt=""></p>
 <a id="more"></a>
-<p>初稿，无说明，只有源码</p>
+<p>首先不考虑动态部分，只考虑怎么获得我们画图需要的点的具体坐标位置。在这里，我用的方法是一种特别简单明了的方法，其思路可以用下面这个图表示，用语言来描述的话，就是已知1个线段的始末点坐标，先寻找2个三等分点，然后将第2个三等分点围绕第1个三等分点逆时针旋转60度，即可得到5个点，其中前4个点保留(因为最后一个点，是下一个线段的第一个点,无需重复保留)。这个是我自己的思路，看上去代码挺多的，但是胜在直观形象。关于Koch曲线的其他数据生成方式，可以参考<a href="http://tieba.baidu.com/p/3066868023?pid=51176414631&amp;cid=0#51176414631" target="_blank" rel="external">这里</a>。<br><img src="/img/Koch曲线的动态化-1.jpg" alt="Koch曲线的动态化-1"><br>其MMA实现为：</p>
 <pre class="prettyprint  lang-mma">
 Clear["Global`*"]
-rotate[{x1_, y1_}, {x2_, y2_}] := Evaluate[Simplify@RotationTransform[1. Pi/3, {x2, y2}][{x1, y1}]];
-generate[{p1_, p5_}] := Module[{p2, p3, p4},
+rotate[p4_, p2_] := Evaluate[Simplify@RotationTransform[1. Pi/3, p2][p4]];
+generate[p1_, p5_] := Module[{p2, p3, p4},
+    p2 = (p5 - p1)/3 + p1;
+    p4 = 2 (p5 - p1)/3 + p1;
+    p3 = rotate[p4, p2];
+    {p1, p2, p3, p4}];
+</pre>
+
+<p>上述代码中，一定要用浮点数计算，因为这样才会比较高效率的得到我们需要的数据。当然了，上述代码即使用了浮点数计算，也是比较慢的(其实在本文中，上述代码的运行速度足够了，因为我们最终目的是画图，所以并不需要迭代很多次，画到5/6阶就足够了)。仔细观察上述代码，可以发现上述代码其实就是大量的加减乘除，所以可以考虑用编译来加速。顺便打个广告(求广告费~)，对于编译已经有一定的了解但是还不够深入的人，可以看一下<a href="http://www.newsciencecore.com/forum/forum.php?mod=viewthread&amp;tid=371&amp;extra=page%3D1" target="_blank" rel="external">这个帖子</a>,相信能有一定的帮助。上述代码的编译版本如下：</p>
+<pre class="prettyprint  lang-mma">
+Clear["Global`*"]
+rotate = Compile[&#123&#123p4, _Real, 1}, {p2, _Real, 1}},
+    &#123&#123 0.5, -0.8660254037844386}.p4 + {0.5, 0.8660254037844386}.p2, 
+     {0.8660254037844386, 0.5}.p4 + {-0.8660254037844386, 0.5}.p2}];
+generate = Compile[&#123&#123p1, _Real, 1}, {p5, _Real, 1}},
+   Module[{p2, p3, p4}, 
     p2 = (p5 - p1)/3 + p1;
     p4 = 2 (p5 - p1)/3 + p1;
     p3 = rotate[p4, p2];
     {p1, p2, p3, p4}]
-data[0] = N@{ {0, 0}, {1, 0} };
-data[n_] := data[n] = Flatten[{generate /@ Partition[data[n - 1], 2, 1], { { {1, 0} } }}, 2];
-get[{p1_, p2_, p3_, p4_, p5_}, t_] := { {p1, p2, (1 - t) p4 + t p3}, {(1 - t) p2 + t p3, p4, p5}}
-getGIF[data_, t_] := get[#, t] & /@ Partition[data, 5, 4];
-newdata[t_] := Flatten[getGIF[data[Quotient[t + 1, 1]], Mod[t, 1]], 1];
+   ];
+</pre>
 
-Manipulate[ListLinePlot[newdata[t], PlotRange -> { {0, 1}, {-0.02, 0.3}}, 
-  AspectRatio -> 0.32, Axes -> False, PlotStyle -> RGBColor[0.353, 0.741, 0.913], 
-  ImageSize -> {500, 200}], {t, 0, 4, 0.03}, SaveDefinitions -> True, 
- AutorunSequencing -> All]
+<p>初始条件下就是一条线段啦，所以<code>data[0]=N@{ {0, 0}, {1, 0}}</code>，注意，加个N让后面的计算都是浮点数计算。然后就是迭代啦。</p>
+<pre class="prettyprint  lang-mma">
+data[0]=N@&#123&#123 0, 0}, {1, 0}};
+data[n_] := data[n] = Flatten[{generate @@@ Partition[data[n - 1], 2, 1], &#123&#123&#123 1, 0}}}}, 2];
+</pre>
 
+<p><code>Partition</code>就是把一系列点分成2个1组，然后<code>generate</code>上去，当然，别忘了由于我们只保存了<code>p1,p2,p3,p4</code>，所以<code>{1,0}</code>这个点就只能<code>Flatten</code>进去啦。现在，我们就可以画图了，例如这样<code>Graphics[Line@data[3]]</code><br><img src="/img/Koch曲线的动态化-2.jpg" alt="Koch曲线的动态化-2"><br>到现在，静态的图我们就已经画出来了。接下来就是考虑如何动态化的过程啦。这个动态化，说难也不难，说简单也不简单。对于学过物理的，应该都知道，如果已知状态<code>A</code>和状态<code>B</code>，0时刻处于状态<code>A</code>，1时刻处于状态<code>B</code>，0到1时刻是均匀变化的，那么任意时刻，状态就是<code>(1-t)A+tB</code>啦。比如玻色子费米子任意子的自旋、匀速运动等等。在这里的动态化，不就是一个点的匀速运动嘛！所以我们就写一个代码啦，如果已知1时刻的5个点，那么0时刻不就是<code>p3</code>点和<code>p2</code>或<code>p4</code>重合嘛，0到1时刻的中间任意时刻，就是这么一个状态，</p>
+<pre class="prettyprint  lang-mma">
+move[{p1_, p2_, p3_, p4_, p5_}, t_] := &#123&#123p1, p2, (1 - t) p4 + t p3}, {(1 - t) p2 + t p3, p4, p5}};
+</pre>
+
+<p>举个简单的例子示意一下</p>
+<pre class="prettyprint  lang-mma">
+Manipulate[Graphics[Line@move[&#123&#123 0, 0}, {1/3, 0}, {0.5, 0.289}, {2/3, 0}, {1, 0}}, t], 
+    PlotRange -> &#123&#123 0, 1}, {-0.1, 0.3}}], {t, 0, 1}]
+</pre>
+
+<p><code>move</code>函数是接收5个点，实际上数据集里包含很多点啊，所以又轮到<code>Partition</code>上场了。</p>
+<pre class="prettyprint  lang-mma">
+AllMove[data_, t_] := move[#, t] & /@ Partition[data, 5, 4];
+</pre>
+
+<p>再举个简单的例子示意一下</p>
+<pre class="prettyprint  lang-mma">
+Manipulate[Graphics@Line@Flatten[AllMove[data[2], t], 1], {t, 0, 1}]
+</pre>
+
+<p>在上面，<code>data[2]</code>里面的2是固定的，但是实际上这个2应该是从1取到5的正整数，<code>AllMove</code>里的第二个参数，也应该是从0变化到1，再变成0，再变化到1的。所以，我们就用到了<code>Quotient</code>和<code>Mod</code>。</p>
+<pre class="prettyprint  lang-mma">
+newdata[t_] := Flatten[AllMove[data[Quotient[t + 1, 1]], Mod[t, 1]], 1];
+</pre>
+
+<p>最后，画图并且美化一下就OK啦。</p>
+<pre class="prettyprint  lang-mma">
+Manipulate[ListLinePlot[newdata[t], PlotRange -> &#123&#123 0, 1}, {-0.02, 0.3}}, AspectRatio -> 0.32, 
+        Axes -> False, PlotStyle -> RGBColor[0.353, 0.741, 0.913], ImageSize -> {500, 200}],
+    {t, 0, 4, 0.03}, SaveDefinitions -> True]
+</pre>
+
+<p>想输出<code>GIF</code>动态图片的话，运行下面代码就搞定啦。注意这是在当前笔记本路径下保存<code>GIF</code>的，所以如果你是新建nb的话，下面这个代码会报错的，可以先保存nb再运行，或者修改一下<code>Export</code>的路径。</p>
+<pre class="prettyprint  lang-mma">
 alldata = Table[newdata[t], {t, 0, 4, 0.02}];
 pic = ListLinePlot[#, PlotRange -> { {0, 1}, {-0.02, 0.3}}, AspectRatio -> 0.32, Axes -> False, 
      PlotStyle -> RGBColor[0.353, 0.741, 0.913], ImageSize -> {500, 200}] & /@ alldata;
 Export[NotebookDirectory[] <> "Koch.gif", pic, "DisplayDurations" -> 1/60]
+</pre>
 
+<p>最终的全部代码为：</p>
+<pre class="prettyprint  lang-mma">
+Clear["Global`*"]
+rotate[p4_, p2_] := Evaluate[Simplify@RotationTransform[1. Pi/3, p2][p4]];
+generate[p1_, p5_] := Module[{p2, p3, p4},
+    p2 = (p5 - p1)/3 + p1;
+    p4 = 2 (p5 - p1)/3 + p1;
+    p3 = rotate[p4, p2];
+    {p1, p2, p3, p4}];
+
+data[0]=N@&#123&#123 0, 0}, {1, 0}};
+data[n_] := data[n] = Flatten[{generate @@@ Partition[data[n - 1], 2, 1], &#123&#123&#123 1, 0}}}}, 2];
+
+move[{p1_, p2_, p3_, p4_, p5_}, t_] := &#123&#123p1, p2, (1 - t) p4 + t p3}, {(1 - t) p2 + t p3, p4, p5}};
+AllMove[data_, t_] := move[#, t] & /@ Partition[data, 5, 4];
+newdata[t_] := Flatten[AllMove[data[Quotient[t + 1, 1]], Mod[t, 1]], 1];
+
+Manipulate[ListLinePlot[newdata[t], PlotRange -> &#123&#123 0, 1}, {-0.02, 0.3}}, AspectRatio -> 0.32, 
+        Axes -> False, PlotStyle -> RGBColor[0.353, 0.741, 0.913], ImageSize -> {500, 200}],
+    {t, 0, 4, 0.03},SaveDefinitions -> True]
+
+alldata = Table[newdata[t], {t, 0, 4, 0.02}];
+pic = ListLinePlot[#, PlotRange -> { {0, 1}, {-0.02, 0.3}}, AspectRatio -> 0.32, Axes -> False, 
+     PlotStyle -> RGBColor[0.353, 0.741, 0.913], ImageSize -> {500, 200}] & /@ alldata;
+Export[NotebookDirectory[] <> "Koch.gif", pic, "DisplayDurations" -> 1/60] 
 </pre>
 
 <hr>
