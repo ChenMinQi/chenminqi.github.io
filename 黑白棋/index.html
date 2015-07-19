@@ -212,13 +212,15 @@ cdf.embed('/cdf/cdf2.cdf', 800, 600);
 </section>
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <!-- 显示右边栏 -->
+<div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
   <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CDF"><span class="toc-number">1.</span> <span class="toc-text">CDF</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#代码"><span class="toc-number">2.</span> <span class="toc-text">代码</span></a></li></ol>
   </div>
 
+<!-- 不显示右边栏 -->
 <div id="asidepart">
 <div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
 <aside class="clearfix">
@@ -308,7 +310,7 @@ cdf.embed('/cdf/cdf2.cdf', 800, 600);
 
 
 <div id="mc_embed_signup">
-    <font color= #fafafa>"我就是想空一行而已"</font>
+	<font color= #fafafa>"我就是想空一行而已"</font>
 	<p class="asidetitle">邮件订阅</p>
 	<form action="//github.us11.list-manage.com/subscribe/post?u=842a86acab82b16175d4d1745&amp;id=47eb724e5b" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
 		<div id="mc_embed_signup_scroll">
@@ -331,6 +333,8 @@ cdf.embed('/cdf/cdf2.cdf', 800, 600);
 
 </aside>
 </div>
+
+
     </div>
     <footer><div id="footer" >
 
@@ -456,9 +460,7 @@ $(document).ready(function(){
   '<a href="#" class="overlay" id="qrcode"></a>',
   '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
   '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
-  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
   '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
-  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
   '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
   '<span title="Share to"></span>'
   ].join('');

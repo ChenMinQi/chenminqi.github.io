@@ -111,10 +111,10 @@ a img {
   -webkit-margin-after: 0;
 }
 body {
-  background: #ddd;
+  background: #fff;
   font-family: "Helvetica Neue", "Helvetica", "Microsoft YaHei", "WenQuanYi Micro Hei", Arial, sans-serif;
   font-size: 100%;
-  color: #817c7c;
+  color: #000;
   line-height: 1.5;
 }
 small {
@@ -136,7 +136,7 @@ sub {
 }
 a {
   text-decoration: none;
-  color: #817c7c;
+  color: #000;
 }
 a:hover,
 a:focus {
@@ -592,7 +592,7 @@ header nav ul li a:hover {
   }
 }
 #main section.post {
-  background: #fafafa;
+  background: #fff;
   margin-bottom: 0.125em;
 }
 #main section.post a {
@@ -618,10 +618,10 @@ header nav ul li a:hover {
   line-height: 2;
 }
 #main section.post a p {
-  color: #817c7c;
+  color: #000;
 }
 #main section.post a time {
-  color: #817c7c;
+  color: #000;
   display: block;
   margin: 0.5em 0;
   font-size: 0.5em;
@@ -630,7 +630,7 @@ header nav ul li a:hover {
   margin-left: 10% !important;
 }
 #page-nav {
-  background: #fafafa;
+  background: #fff;
   text-align: center;
   overflow: hidden;
 }
@@ -706,7 +706,7 @@ header nav ul li a:hover {
   margin: 1em 0;
   width: 97%;
   padding: 2em 0 2em 3%;
-  background: #fafafa;
+  background: #fff;
   border-left: 0.5em solid #ccc;
 }
 @media only screen and (min-width: 1024px) {
@@ -781,7 +781,7 @@ header nav ul li a:hover {
 .post,
 .page,
 .resume {
-  background: #fafafa;
+  background: #fff;
 }
 .post a,
 .page a,
@@ -915,7 +915,7 @@ article .article-content blockquote {
   font-size: 110%;
 }
 article .article-content blockquote footer {
-  background: #fafafa;
+  background: #fff;
   padding: 0;
   margin: 0;
   font-size: 80%;
@@ -1046,7 +1046,7 @@ article .article-content .right {
   float: right;
 }
 footer.article-footer {
-  background: #fafafa;
+  background: #fff;
   padding: 0 4%;
   margin: 0;
   border-top: 1px solid #dbdbdb;
@@ -1098,7 +1098,7 @@ footer.article-footer {
   font-size: 100%;
   font-family: "FontAwesome";
   text-align: center;
-  color: #817c7c;
+  color: #000;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: 1.5em;
@@ -1415,7 +1415,7 @@ section.comment {
 }
 #toc.toc-aside strong {
   padding: 0.3em 0;
-  color: #817c7c;
+  color: #000;
 }
 #toc.toc-aside:hover {
   -webkit-transition: opacity 0.3s ease-out;
@@ -1490,7 +1490,7 @@ section.comment {
   }
 }
 #asidepart {
-  background: #fafafa;
+  background: #fff;
   margin: 1em 0 0;
   padding: 0.5em 2% 1em;
 }
@@ -1602,7 +1602,7 @@ section.comment {
 }
 .rsspart a:hover {
   color: #1e90ff;
-  background: #fafafa;
+  background: #fff;
 }
 .rsspart a::before {
   font-family: "FontAwesome";
@@ -1891,7 +1891,7 @@ footer {
   color: #1e90ff !important;
 }
 .ds-avatar {
-  background: #fafafa !important;
+  background: #fff !important;
 }
 .ds-avatar img {
   width: 54px !important;
@@ -1953,17 +1953,17 @@ footer {
   padding-bottom: 1em !important;
 }
 textarea {
-  color: #817c7c !important;
+  color: #000 !important;
   background: #fff !important;
 }
 textarea::-webkit-input-placeholder {
-  color: #817c7c !important;
+  color: #000 !important;
 }
 textarea::-moz-placeholder {
-  color: #817c7c !important;
+  color: #000 !important;
 }
 .article-gallery {
-  background: #fafafa;
+  background: #fff;
   position: relative;
 }
 .article-gallery-photos {
